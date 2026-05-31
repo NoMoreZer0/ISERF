@@ -3,7 +3,13 @@
 # this code is currently for python 2.7
 from __future__ import print_function
 from time import sleep
-import smbus
+
+# Prefer smbus2 (pip-installable, modern). Fall back to the legacy python-smbus
+# system package if smbus2 is unavailable. Their APIs are compatible here.
+try:
+    import smbus2 as smbus
+except ImportError:
+    import smbus
 
 # register addresses
 REG_INTR_STATUS_1 = 0x00
