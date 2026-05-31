@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Local env / secrets (set these as environment variables on the Pi instead)
+.env
+.env.*
+
+# OS
+.DS_Store

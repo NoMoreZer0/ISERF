@@ -39,6 +39,9 @@ import simpleaudio as sa
 # Import the doug-burrell heartrate monitor (must be on Python path)
 from heartrate_monitor import HeartRateMonitor
 
+# Reports alerts to the ISERF web app (non-blocking, edge-triggered)
+from reporter import AlertReporter
+
 
 # ----------------------------
 # EAR helpers (from your existing code)
@@ -139,6 +142,9 @@ def main():
     hrm.start_sensor()
     time.sleep(2.0)  # give the sensor a moment to start producing samples
 
+    # ---- Web app reporter (reads config from environment variables) ----
+    reporter = AlertReporter()
+
     # ---- Webcam setup ----
     print("Opening webcam...")
     cap = cv2.VideoCapture(0)
@@ -218,6 +224,10 @@ def main():
                 start_alarm()
             else:
                 stop_alarm()
+
+            # ---- Report to the web app (edge-triggered; non-blocking) ----
+            reporter.update("drowsiness", active=eyes_closed, ear=ear_value)
+            reporter.update("bpm_abnormal", active=bpm_abnormal, bpm=bpm)
 
             # ---- Overlay text ----
             if ear_value is not None:
